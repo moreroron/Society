@@ -23,7 +23,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText mEmail,mPassword;
     Button mRegisterBtn;
     FirebaseAuth fAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +34,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
 
-//
-//        if(fAuth.getCurrentUser() != null) {
-//            Intent intent = new Intent(this,MainActivity.class);
-//            startActivity(intent);
-//        }
+
+        if(fAuth.getCurrentUser() != null) {
+            Intent intent = new Intent(this,ProfileActivity.class);
+            startActivity(intent);
+        }
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
