@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Society</string>
+    <string name="UserNameTextViewText">Username</string>
 </resources>
