@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "762268728542",
+    "firebase_url": "https://society-f485a.firebaseio.com",
+    "project_id": "society-f485a",
+    "storage_bucket": "society-f485a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762268728542:android:bf79ee92e9aee3a38f164f",
+        "android_client_info": {
+          "package_name": "com.example.society"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "762268728542-5ple9bic3ksrb9up9dnbq96tq0rik34s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzoEtwH58oOQId6CCrkFGMh7r8oDBT-_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "762268728542-5ple9bic3ksrb9up9dnbq96tq0rik34s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
