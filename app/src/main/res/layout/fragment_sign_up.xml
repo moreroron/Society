@@ -2,23 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/signUp_constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".SignUpFragment"
+    tools:context=".auth.SignUpFragment"
     tools:layout_editor_absoluteY="81dp">
 
 
     <EditText
-        android:id="@+id/signUp_textField_username"
+        android:id="@+id/fragment_signIn_textField_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="175dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
-        android:hint="username"
+        android:hint="email"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#80FFFFFF"
@@ -27,27 +26,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/signUp_textField_password"
+        android:id="@+id/fragment_signIn_textField_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#80FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_textField_username" />
-
-    <EditText
-        android:id="@+id/signUp_textField_password2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:hint="password"
@@ -57,49 +40,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_textField_password" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_signIn_textField_email" />
 
     <EditText
-        android:id="@+id/signUp_textField_password3"
+        android:id="@+id/signUp_textField_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
-        android:hint="password"
+        android:hint="username"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#80FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signUp_textField_password2" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_signIn_textField_password" />
 
     <Button
-        android:id="@+id/signIn_btn_register"
+        android:id="@+id/fragment_signIn_registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:background="#00FFFFFF"
         android:stateListAnimator="@null"
-        android:text="Register"
+        android:text="Login"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/signIn_btn_login"
+        android:id="@+id/fragment_signIn_loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:background="#00BCD4"
         android:stateListAnimator="@null"
-        android:text="Login"
+        android:text="Register"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/signIn_btn_register"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_signIn_registerBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent" />
