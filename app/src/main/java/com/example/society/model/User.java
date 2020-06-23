@@ -5,10 +5,17 @@ import java.util.List;
 
 public class User implements Serializable {
 
-    public static final User instance = new User();
-
     private String mUserId;
     private String mUsername;
+    private String mMail;
+
+    public User(String userId, String email, String username) {
+        mUserId = userId;
+        mUsername = username;
+        mMail = email;
+    }
+
+//    public static final User instance = new User();
 
     public String getUserId() {
         return mUserId;

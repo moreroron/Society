@@ -50,4 +50,8 @@ public class UserFirebase {
             }
         }));
     }
+
+//    public static User getUserById(String userId) {
+//
+//    }
 }
