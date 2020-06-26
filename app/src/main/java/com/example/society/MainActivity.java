@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class MainActivity extends AppCompatActivity implements SignInFragment.Delegate, SignUpFragment.Delegate {
+public class MainActivity extends AppCompatActivity implements SignInFragment.Delegate, SignUpFragment.Delegate, PostsFragment.Delegate {
 
     private static final String TAG = "MAIN ACTIVITY";
 
@@ -107,5 +107,11 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.De
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onAddPostClick() {
+        NavDirections directions = PostsFragmentDirections.actionPostsFragmentToCreatePostFragment();
+        navController.navigate(directions);
     }
 }
