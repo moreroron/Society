@@ -1,7 +1,9 @@
 package com.example.society.auth;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -12,19 +14,34 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.society.CreatePostFragment;
 import com.example.society.R;
 
 public class SignUpFragment extends Fragment {
 
     public interface Delegate {
         void onRegisterClick(String email, String password, String username);
+        void onBackToLoginClick();
     }
+
+    private Delegate parent;
 
     private TextView emailTextView;
     private TextView passwordTextView;
     private TextView usernameTextView;
     private Button registerBtn;
     private Button loginBtn;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof CreatePostFragment.Delegate) {
+            parent = (SignUpFragment.Delegate) getActivity();
+        } else {
+            throw new RuntimeException(context.toString() + "CreatePostFragment's MainActivity must implement delegate methods");
+        }
+    }
 
     public SignUpFragment() {}
 
@@ -44,12 +61,19 @@ public class SignUpFragment extends Fragment {
                 String emailValue = emailTextView.getText().toString();
                 String passwordValue = passwordTextView.getText().toString();
                 String usernameValue = usernameTextView.getText().toString();
-                Delegate delegate = (Delegate) getActivity();
+
                 if (checkValidation(emailValue, passwordValue, usernameValue)) {
-                    delegate.onRegisterClick(emailValue, passwordValue, usernameValue);
+                    parent.onRegisterClick(emailValue, passwordValue, usernameValue);
                 } else {
                     Toast.makeText(getContext(), "Either the password, username or email format is invalid", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parent.onBackToLoginClick();
             }
         });
 

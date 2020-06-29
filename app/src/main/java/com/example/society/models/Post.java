@@ -33,6 +33,8 @@ public class Post {
         this.imageUrl = imageUrl;
     }
 
+    public Post() {}
+
     public String getPostId() {
         return postId;
     }

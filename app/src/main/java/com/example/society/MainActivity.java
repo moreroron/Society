@@ -21,7 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class MainActivity extends AppCompatActivity implements SignInFragment.Delegate, SignUpFragment.Delegate, PostsFragment.Delegate {
+public class MainActivity extends AppCompatActivity implements
+        SignInFragment.Delegate,
+        SignUpFragment.Delegate,
+        PostsFragment.Delegate,
+        CreatePostFragment.Delegate
+{
 
     private static final String TAG = "MAIN ACTIVITY";
 
@@ -87,6 +92,12 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.De
                 });
     }
 
+    @Override
+    public void onBackToLoginClick() {
+        NavDirections directions = SignUpFragmentDirections.actionSignUpFragmentToSignInFragment();
+        navController.navigate(directions);
+    }
+
     // adds additional information for registered user (username + avatar) AND redirect forward
     private void addAdditionalInformation(String username) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -112,6 +123,12 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.De
     @Override
     public void onAddPostClick() {
         NavDirections directions = PostsFragmentDirections.actionPostsFragmentToCreatePostFragment();
+        navController.navigate(directions);
+    }
+
+    @Override
+    public void onSubmitPostClick() {
+        NavDirections directions = CreatePostFragmentDirections.actionGlobalPostsFragment();
         navController.navigate(directions);
     }
 }
