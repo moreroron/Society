@@ -43,42 +43,50 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navController = Navigation.findNavController(this, R.id.activity_main_navHost);
-
         mAuth = FirebaseAuth.getInstance();
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        navController = Navigation.findNavController(this, R.id.activity_main_navHost);
         drawerConfig();
 
     }
 
     private void drawerConfig() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
         NavigationUI.setupWithNavController(navigationView, navController);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    // drawer
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.drawer_profile: {
-                Navigation.findNavController(this, R.id.activity_main_navHost).navigate(R.id.drawer_profile);
+                NavDirections directions = PostsFragmentDirections.actionGlobalProfileFragment();
+                navController.navigate(directions);
             }
         }
         menuItem.setChecked(true);
+        NavigationUI.onNavDestinationSelected(menuItem, navController);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -93,4 +101,8 @@ public class MainActivity extends AppCompatActivity implements
         navController.navigate(directions);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.activity_main_navHost), drawerLayout);
+    }
 }
