@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.society.R;
@@ -43,12 +42,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         private TextView username;
         private TextView date;
         private TextView subtitle;
+        private TextView title;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.post_item_username_textView);
             date = itemView.findViewById(R.id.post_item_date_textView);
             subtitle = itemView.findViewById(R.id.post_item_subtitle_textView);
+            title = itemView.findViewById(R.id.post_item_title_textView);
         }
 
         public void onBind(int position) {
@@ -56,6 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             username.setText(currentPost.getAuthor());
             date.setText(currentPost.getDate());
             subtitle.setText(currentPost.getSubtitle());
+            title.setText(currentPost.getTitle());
         }
     }
 
