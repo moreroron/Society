@@ -36,10 +36,10 @@ public class SignUpFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof CreatePostFragment.Delegate) {
+        if (context instanceof SignUpFragment.Delegate) {
             parent = (SignUpFragment.Delegate) getActivity();
         } else {
-            throw new RuntimeException(context.toString() + "CreatePostFragment's MainActivity must implement delegate methods");
+            throw new RuntimeException(context.toString() + "SignUpFragment's AuthActivity must implement delegate methods");
         }
     }
 
@@ -91,7 +91,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
 }

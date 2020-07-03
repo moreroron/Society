@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.society.adapters.PostAdapter;
 import com.example.society.models.Post;
 import com.example.society.viewmodels.PostViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -44,6 +45,7 @@ public class PostsFragment extends Fragment {
 
     TextView username;
     Button addPostBtn;
+    FloatingActionButton fab;
 
     public PostsFragment() {}
 
@@ -71,8 +73,7 @@ public class PostsFragment extends Fragment {
         postAdapter = new PostAdapter(posts);
         recyclerView.setAdapter(postAdapter);
 
-        username = view.findViewById(R.id.fragment_posts_textView_username);
-        addPostBtn = view.findViewById(R.id.fragment_posts_addPostBtn);
+        fab = view.findViewById(R.id.fragment_posts_fab);
 
         postsLiveData = viewModel.getPosts();
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
@@ -88,10 +89,10 @@ public class PostsFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String _username = user.getDisplayName();
-            username.setText(_username);
+//            username.setText(_username);
         }
 
-        addPostBtn.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent.onAddPostClick();

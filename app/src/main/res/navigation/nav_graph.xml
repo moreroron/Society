@@ -3,34 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signInFragment">
+    app:startDestination="@id/profileFragment">
 
-    <fragment
-        android:id="@+id/signInFragment"
-        android:name="com.example.society.auth.SignInFragment"
-        android:label="Sign In"
-        tools:layout="@layout/fragment_sign_in">
-        <action
-            android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
-        <action
-            android:id="@+id/action_signInFragment_to_postsFragment"
-            app:destination="@id/postsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.example.society.auth.SignUpFragment"
-        android:label="Sign Up"
-        tools:layout="@layout/fragment_sign_up" >
-        <action
-            android:id="@+id/action_signUpFragment_to_postsFragment"
-            app:destination="@id/postsFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_signInFragment"
-            app:destination="@id/signInFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
-    </fragment>
     <fragment
         android:id="@+id/postsFragment"
         android:name="com.example.society.PostsFragment"
@@ -46,4 +20,12 @@
         android:label="Create Post"
         tools:layout="@layout/fragment_create_post" />
     <action android:id="@+id/action_global_postsFragment" app:destination="@id/postsFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.society.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <action android:id="@+id/action_global_profileFragment" app:destination="@id/profileFragment"/>
+
+
 </navigation>

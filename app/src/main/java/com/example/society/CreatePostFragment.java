@@ -68,7 +68,9 @@ public class CreatePostFragment extends Fragment {
                 // for unique id
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 String randomId = db.collection("posts").document().getId();
+
                 String date = Calendar.getInstance().getTime().toString();
+
                 Post post = new Post(randomId, user.getDisplayName(), title, text, 0, date, "");
                 viewModel.addPost(post);
 
