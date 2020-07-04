@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.society.adapters.PostAdapter;
@@ -43,8 +44,6 @@ public class PostsFragment extends Fragment {
         void onAddPostClick();
     }
 
-    TextView username;
-    Button addPostBtn;
     FloatingActionButton fab;
 
     public PostsFragment() {}
@@ -64,33 +63,21 @@ public class PostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        // TODO: move to separate function
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_posts_recyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        postAdapter = new PostAdapter(posts);
-        recyclerView.setAdapter(postAdapter);
+        recyclerViewConfig(view);
 
         fab = view.findViewById(R.id.fragment_posts_fab);
+
 
         postsLiveData = viewModel.getPosts();
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> postsData) {
-//                posts = postsData;
-//                postAdapter.notifyDataSetChanged();
+        // posts = postsData;
+        // postAdapter.notifyDataSetChanged();
                 postAdapter = new PostAdapter(postsData);
                 recyclerView.setAdapter(postAdapter);
             }
         });
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String _username = user.getDisplayName();
-//            username.setText(_username);
-        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,5 +88,15 @@ public class PostsFragment extends Fragment {
 
         return view;
 
+    }
+
+    private void recyclerViewConfig(View view) {
+        recyclerView = view.findViewById(R.id.fragment_posts_recyclerView);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        postAdapter = new PostAdapter(posts);
+        recyclerView.setAdapter(postAdapter);
     }
 }

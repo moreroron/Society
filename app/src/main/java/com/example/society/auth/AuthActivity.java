@@ -113,8 +113,9 @@ public class AuthActivity extends AppCompatActivity implements
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            NavDirections directions = SignUpFragmentDirections.actionSignUpFragmentToPostsFragment();
-                            navController.navigate(directions);
+                            ActivityNavigator activityNavigator = new ActivityNavigator(getApplicationContext());
+                            activityNavigator.navigate(activityNavigator.createDestination()
+                                    .setIntent(new Intent(getApplicationContext(), MainActivity.class)), null, null, null);
                         }
                     }
                 });

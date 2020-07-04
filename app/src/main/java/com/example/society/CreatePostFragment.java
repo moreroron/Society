@@ -71,7 +71,7 @@ public class CreatePostFragment extends Fragment {
 
                 String date = Calendar.getInstance().getTime().toString();
 
-                Post post = new Post(randomId, user.getDisplayName(), title, text, 0, date, "");
+                Post post = new Post(randomId, user.getUid(), user.getDisplayName(), title, text, 0, date, "");
                 viewModel.addPost(post);
 
                 parent.onSubmitPostClick();

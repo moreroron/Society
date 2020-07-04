@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity
 public class Post {
 
@@ -16,6 +14,7 @@ public class Post {
     @PrimaryKey
     @NonNull
      private String postId;
+     private String userId;
      private String author;
      private String title;
      private String subtitle;
@@ -23,8 +22,9 @@ public class Post {
      private String date;
      private String imageUrl;
 
-    public Post(String postId, String author, String title, String subtitle, int likes, String date, String imageUrl) {
+    public Post(@NonNull String postId, String userId, String author, String title, String subtitle, int likes, String date, String imageUrl) {
         this.postId = postId;
+        this.userId = userId;
         this.author = author;
         this.title = title;
         this.subtitle = subtitle;
@@ -43,13 +43,13 @@ public class Post {
         this.postId = postId;
     }
 
-    public String getAuthor() {
-        return author;
-    }
+    public String getUserId() { return userId; }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getAuthor() { return author; }
+
+    public void setAuthor(String author) { this.author = author; }
 
     public String getTitle() {
         return title;
@@ -87,9 +87,7 @@ public class Post {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
 
 
