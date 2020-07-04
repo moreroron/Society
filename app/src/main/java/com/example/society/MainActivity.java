@@ -4,16 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.society.auth.AuthActivity;
 import com.example.society.auth.SignInFragment;
 import com.example.society.auth.SignInFragmentDirections;
 import com.example.society.auth.SignUpFragment;
@@ -29,6 +32,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class MainActivity extends AppCompatActivity implements
         PostsFragment.Delegate,
         CreatePostFragment.Delegate,
+        ProfileFragment.Delegate,
         NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -61,9 +65,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.drawer_profile: {
+            case R.id.drawer_menu_profile: {
                 NavDirections directions = PostsFragmentDirections.actionGlobalProfileFragment();
                 navController.navigate(directions);
+                break;
+            }
+            case R.id.drawer_menu_signout: {
+                FirebaseAuth.getInstance().signOut();
+                ActivityNavigator activityNavigator = new ActivityNavigator(getApplicationContext());
+                activityNavigator.navigate(activityNavigator.createDestination()
+                        .setIntent(new Intent(getApplicationContext(), AuthActivity.class)), null, null, null);
+                break;
             }
         }
         menuItem.setChecked(true);
@@ -104,5 +116,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.activity_main_navHost), drawerLayout);
+    }
+
+    @Override
+    public void onEditProfileClick() {
+
     }
 }

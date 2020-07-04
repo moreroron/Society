@@ -1,26 +1,23 @@
 package com.example.society.viewmodels;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.society.api.PostFirebase;
 import com.example.society.models.Post;
 import com.example.society.repositories.PostRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class PostViewModel extends ViewModel {
+public class ProfileViewModel extends ViewModel {
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private LiveData<List<Post>> posts;
 
     public LiveData<List<Post>> getPosts() {
         if (posts == null) {
-            posts = PostRepository.getInstance().getPosts();
+            posts = PostRepository.getInstance().getPostsById(user.getUid());
         }
         return posts;
-    }
-
-    public LiveData<List<Post>> updatePost(Post post) {
-        return PostRepository.getInstance().updatePost(post);
     }
 }
