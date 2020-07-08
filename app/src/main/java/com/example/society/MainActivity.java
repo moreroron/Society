@@ -32,7 +32,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class MainActivity extends AppCompatActivity implements
         PostsFragment.Delegate,
         CreatePostFragment.Delegate,
-        ProfileFragment.Delegate,
         NavigationView.OnNavigationItemSelectedListener
 {
 
@@ -116,10 +115,5 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.activity_main_navHost), drawerLayout);
-    }
-
-    @Override
-    public void onEditProfileClick() {
-
     }
 }

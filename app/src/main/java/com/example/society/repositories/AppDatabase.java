@@ -12,7 +12,7 @@ import com.example.society.models.PostDao;
 import com.example.society.models.User;
 import com.example.society.models.UserDao;
 
-@Database(entities = {User.class, Post.class}, version = 1)
+@Database(entities = {User.class, Post.class}, version = 2)
 abstract class AppDatabaseRepository extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract PostDao postDao();

@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.society.MainActivity;
@@ -61,6 +62,7 @@ public class AuthActivity extends AppCompatActivity implements
     // login a user and direct forward
     @Override
     public void onLoginClick(String email, String password) {
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

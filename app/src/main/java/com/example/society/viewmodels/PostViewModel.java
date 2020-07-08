@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.society.api.PostFirebase;
 import com.example.society.models.Post;
 import com.example.society.repositories.PostRepository;
 
@@ -12,15 +11,12 @@ import java.util.List;
 
 public class PostViewModel extends ViewModel {
     private LiveData<List<Post>> posts;
+//    public MutableLiveData<Boolean> showSpinner = new MutableLiveData<>(true);
 
-    public LiveData<List<Post>> getPosts() {
+    public LiveData<List<Post>> getAllPosts() {
         if (posts == null) {
-            posts = PostRepository.getInstance().getPosts();
+            posts = PostRepository.getInstance().getAllPosts();
         }
         return posts;
-    }
-
-    public LiveData<List<Post>> updatePost(Post post) {
-        return PostRepository.getInstance().updatePost(post);
     }
 }

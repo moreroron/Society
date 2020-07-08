@@ -20,4 +20,8 @@ public class ProfileViewModel extends ViewModel {
         }
         return posts;
     }
+
+    public void deletePost(Post post) {
+        PostRepository.getInstance().deletePost(post);
+    }
 }
