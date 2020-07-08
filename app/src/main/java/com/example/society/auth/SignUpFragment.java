@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ public class SignUpFragment extends Fragment {
         usernameTextView = view.findViewById(R.id.signUp_textField_username);
         registerBtn = view.findViewById(R.id.fragment_signIn_loginBtn);
         loginBtn = view.findViewById(R.id.fragment_signIn_registerBtn);
+        final ProgressBar spinner = view.findViewById(R.id.fragment_signUp_spinner_progressBar);
+        spinner.setVisibility(View.GONE);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +66,7 @@ public class SignUpFragment extends Fragment {
                 String usernameValue = usernameTextView.getText().toString();
 
                 if (checkValidation(emailValue, passwordValue, usernameValue)) {
+                    spinner.setVisibility(View.VISIBLE);
                     parent.onRegisterClick(emailValue, passwordValue, usernameValue);
                 } else {
                     Toast.makeText(getContext(), "Either the password, username or email format is invalid", Toast.LENGTH_SHORT).show();
@@ -91,7 +95,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
 }

@@ -8,14 +8,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.society.adapters.PostAdapter;
+import com.example.society.adapters.ProfileAdapter;
 import com.example.society.models.Post;
 import com.example.society.viewmodels.PostViewModel;
 import com.example.society.viewmodels.ProfileViewModel;
@@ -25,38 +30,37 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterCallback {
 
     private List<Post> posts = new ArrayList<>();
-    private Delegate parent;
     private ProfileViewModel viewModel;
     LiveData<List<Post>> postsLiveData;
 
+    View view;
+
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter postAdapter;
+    private RecyclerView.Adapter profileAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    public interface Delegate {
-        void onEditProfileClick();
-    }
+    private TextView username;
+    private ImageView avatar;
 
     public ProfileFragment() {}
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof Delegate) {
-            parent = (Delegate) getActivity();
-        } else {
-            throw new RuntimeException(context.toString() + "ProfileFragment's MainActivity must implement delegate methods");
-        }
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        username = view.findViewById(R.id.fragment_profile_username_TextView);
+        avatar = view.findViewById(R.id.fragment_profile_avatar_imageView);
 
         recyclerViewConfig(view);
 
@@ -64,15 +68,14 @@ public class ProfileFragment extends Fragment {
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> postsData) {
-//                posts = postsData;
-//                postAdapter.notifyDataSetChanged();
-                postAdapter = new PostAdapter(postsData);
-                recyclerView.setAdapter(postAdapter);
+                profileAdapter = new ProfileAdapter(postsData, getActivity() ,ProfileFragment.this);
+                recyclerView.setAdapter(profileAdapter);
             }
         });
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+        if (user != null) {
+            username.setText(user.getDisplayName());
+        }
 
         return view;
     }
@@ -83,7 +86,20 @@ public class ProfileFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        postAdapter = new PostAdapter(posts);
-        recyclerView.setAdapter(postAdapter);
+        profileAdapter = new ProfileAdapter(posts, getActivity(), ProfileFragment.this);
+        recyclerView.setAdapter(profileAdapter);
+        
+    }
+
+    @Override
+    public void onEditClick(String postId) {
+        ProfileFragmentDirections.ActionProfileFragmentToEditPostFragment action = ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(null);
+        action.setPostId(postId);
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    @Override
+    public void onDeleteClick(Post post) {
+        viewModel.deletePost(post);
     }
 }

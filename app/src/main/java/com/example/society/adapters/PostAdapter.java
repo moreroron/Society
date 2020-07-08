@@ -3,8 +3,6 @@ package com.example.society.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.society.R;
 import com.example.society.models.Post;
-import com.example.society.viewmodels.PostViewModel;
 
 import java.util.List;
 
@@ -61,6 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             date = itemView.findViewById(R.id.post_item_date_textView);
             subtitle = itemView.findViewById(R.id.post_item_subtitle_textView);
             title = itemView.findViewById(R.id.post_item_title_textView);
+
 //            likesCounter = itemView.findViewById(R.id.post_item_likesCounter_textView);
 //            likesBtn = itemView.findViewById(R.id.post_item_likesBtn_Btn);
         }

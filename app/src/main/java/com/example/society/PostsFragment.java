@@ -11,19 +11,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.society.adapters.PostAdapter;
 import com.example.society.models.Post;
 import com.example.society.viewmodels.PostViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,17 +32,19 @@ public class PostsFragment extends Fragment {
     private Delegate parent;
     private PostViewModel viewModel;
     LiveData<List<Post>> postsLiveData;
+    LiveData<Boolean> showSpinnerLiveData;
+    private boolean showSpinner;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter postAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
 
     public interface Delegate {
         void onAddPostClick();
     }
 
     FloatingActionButton fab;
+    ProgressBar spinner;
 
     public PostsFragment() {}
 
@@ -67,8 +67,17 @@ public class PostsFragment extends Fragment {
 
         fab = view.findViewById(R.id.fragment_posts_fab);
 
+        spinner = view.findViewById(R.id.fragment_posts_spinner_progressBar);
+        spinner.setVisibility(View.VISIBLE);
 
-        postsLiveData = viewModel.getPosts();
+        postsLiveData = viewModel.getAllPosts();
+//        showSpinnerLiveData = viewModel.showSpinner;
+//        showSpinnerLiveData.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean postsArrived) {
+//                    spinner.setVisibility(View.GONE);
+//            }
+//        });
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> postsData) {
@@ -76,6 +85,7 @@ public class PostsFragment extends Fragment {
         // postAdapter.notifyDataSetChanged();
                 postAdapter = new PostAdapter(postsData);
                 recyclerView.setAdapter(postAdapter);
+                spinner.setVisibility(View.GONE);
             }
         });
 
@@ -99,4 +109,5 @@ public class PostsFragment extends Fragment {
         postAdapter = new PostAdapter(posts);
         recyclerView.setAdapter(postAdapter);
     }
+
 }

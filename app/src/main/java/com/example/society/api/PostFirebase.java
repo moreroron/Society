@@ -9,6 +9,8 @@ import com.example.society.adapters.PostAdapter;
 import com.example.society.models.Post;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +28,9 @@ public class PostFirebase {
 
     public static void getAllPosts(final Post.Listener<List<Post>> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(POST_COLLECTION).get().addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
+        db.collection(POST_COLLECTION)
+                .get()
+                .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -66,7 +70,10 @@ public class PostFirebase {
 
     public static void addPost(Post post, final Post.Listener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(POST_COLLECTION).document(post.getPostId()).set(post).addOnCompleteListener((new OnCompleteListener<Void>() {
+        db.collection(POST_COLLECTION)
+                .document(post.getPostId())
+                .set(post)
+                .addOnCompleteListener((new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (listener != null) {
@@ -78,7 +85,10 @@ public class PostFirebase {
 
     public static void updatePost(Post post, final PostAdapter.Listener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(POST_COLLECTION).document(post.getPostId()).set(post).addOnCompleteListener((new OnCompleteListener<Void>() {
+        db.collection(POST_COLLECTION)
+                .document(post.getPostId())
+                .set(post)
+                .addOnCompleteListener((new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (listener != null) {
@@ -87,6 +97,26 @@ public class PostFirebase {
             }
         }));
     }
+
+    public static void deletePost(Post post) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(POST_COLLECTION)
+                .document(post.getPostId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
+
 }
 
 

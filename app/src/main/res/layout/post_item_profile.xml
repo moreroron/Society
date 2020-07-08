@@ -41,7 +41,7 @@
             app:srcCompat="@drawable/bottomshadow" />
 
         <TextView
-            android:id="@+id/post_item_title_textView"
+            android:id="@+id/post_item_profile_title_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
@@ -50,12 +50,12 @@
             android:textColor="#FFFFFF"
             android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/post_item_avatar_imageView"
+            app:layout_constraintBottom_toTopOf="@+id/post_item_profile_avatar_imageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/post_item_avatar_imageView" />
+            app:layout_constraintStart_toStartOf="@+id/post_item_profile_avatar_imageView" />
 
         <ImageView
-            android:id="@+id/post_item_avatar_imageView"
+            android:id="@+id/post_item_profile_avatar_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -69,50 +69,69 @@
             android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/post_item_avatar_imageView"
-            app:layout_constraintStart_toEndOf="@+id/post_item_avatar_imageView"
-            app:layout_constraintTop_toTopOf="@+id/post_item_avatar_imageView">
+            app:layout_constraintBottom_toBottomOf="@+id/post_item_profile_avatar_imageView"
+            app:layout_constraintStart_toEndOf="@+id/post_item_profile_avatar_imageView"
+            app:layout_constraintTop_toTopOf="@+id/post_item_profile_avatar_imageView">
 
             <TextView
-                android:id="@+id/post_item_username_textView"
+                android:id="@+id/post_item_profile_username_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Name LastName"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/post_item_date_textView"
+                app:layout_constraintBottom_toTopOf="@+id/post_item_profile_date_textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/post_item_date_textView"
+                android:id="@+id/post_item_profile_date_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="date"
                 android:textColor="#7CFFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_item_username_textView" />
+                app:layout_constraintTop_toBottomOf="@+id/post_item_profile_username_textView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/post_item_subtitle_textView"
+        android:id="@+id/post_item_profile_subtitle_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
         android:text="TextView"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    <ImageView
+        android:id="@+id/post_item_profile_deleteBtn_Btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/post_item_profile_subtitle_textView"
+        app:layout_constraintTop_toBottomOf="@+id/post_item_profile_subtitle_textView"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <ImageView
+        android:id="@+id/post_item_profile_editBtn_Btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/post_item_profile_deleteBtn_Btn"
+        app:layout_constraintTop_toBottomOf="@+id/post_item_profile_subtitle_textView"
+        app:srcCompat="@drawable/ic_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
