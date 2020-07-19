@@ -11,24 +11,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.society.CreatePostFragment;
 import com.example.society.R;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
 
-public class SignUpFragment extends Fragment {
+import java.util.List;
+
+public class SignUpFragment extends Fragment implements Validator.ValidationListener {
+
+    private ProgressBar spinner;
 
     public interface Delegate {
-        void onRegisterClick(String email, String password, String username);
+        void onRegisterClick(String email, String password, String username, AuthActivity.Listener listener);
         void onBackToLoginClick();
     }
 
+    private Validator validator;
+    private boolean validForm;
+
     private Delegate parent;
 
+    @NotEmpty
+    @Email
     private TextView emailTextView;
+
+    @NotEmpty
+    @Password(min = 6)
     private TextView passwordTextView;
+
+    @NotEmpty
+    @Length(min = 3)
     private TextView usernameTextView;
     private Button registerBtn;
     private Button loginBtn;
@@ -49,53 +71,75 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        initView(view);
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+        return view;
+    }
 
+    private void initView(View view) {
         emailTextView = view.findViewById(R.id.fragment_signIn_textField_email);
         passwordTextView = view.findViewById(R.id.fragment_signIn_textField_password);
         usernameTextView = view.findViewById(R.id.signUp_textField_username);
         registerBtn = view.findViewById(R.id.fragment_signIn_loginBtn);
         loginBtn = view.findViewById(R.id.fragment_signIn_registerBtn);
-        final ProgressBar spinner = view.findViewById(R.id.fragment_signUp_spinner_progressBar);
+        spinner = view.findViewById(R.id.fragment_signUp_spinner_progressBar);
         spinner.setVisibility(View.GONE);
-
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emailValue = emailTextView.getText().toString();
-                String passwordValue = passwordTextView.getText().toString();
-                String usernameValue = usernameTextView.getText().toString();
-
-                if (checkValidation(emailValue, passwordValue, usernameValue)) {
-                    spinner.setVisibility(View.VISIBLE);
-                    parent.onRegisterClick(emailValue, passwordValue, usernameValue);
-                } else {
-                    Toast.makeText(getContext(), "Either the password, username or email format is invalid", Toast.LENGTH_SHORT).show();
-                }
+                register();
             }
         });
-
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent.onBackToLoginClick();
             }
         });
-
-        return view;
     }
 
-    private boolean checkValidation(String email, String password, String username) {
-        return (!email.isEmpty()
-                && email.contains("@")
-                && !password.isEmpty()
-                && !username.isEmpty()
-        );
+    private void register() {
+        validator.validate();
+        String emailValue = emailTextView.getText().toString();
+        String passwordValue = passwordTextView.getText().toString();
+        String usernameValue = usernameTextView.getText().toString();
+
+        if (validForm) {
+            spinner.setVisibility(View.VISIBLE);
+            parent.onRegisterClick(emailValue, passwordValue, usernameValue, new AuthActivity.Listener() {
+                @Override
+                public void onComplete() {
+                    spinner.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        validForm = true;
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        validForm = false;
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+            // Display error messages
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }

@@ -18,19 +18,20 @@ public class Post {
      private String author;
      private String title;
      private String subtitle;
-     private int likes;
      private String date;
-     private String imageUrl;
+     private String cover;
+     private boolean deleted;
+     private long lastUpdated;
 
-    public Post(@NonNull String postId, String userId, String author, String title, String subtitle, int likes, String date, String imageUrl) {
+    public Post(@NonNull String postId, String userId, String author, String title, String subtitle, String date, String cover, boolean deleted) {
         this.postId = postId;
         this.userId = userId;
         this.author = author;
         this.title = title;
         this.subtitle = subtitle;
-        this.likes = likes;
         this.date = date;
-        this.imageUrl = imageUrl;
+        this.cover = cover;
+        this.deleted = deleted;
     }
 
     public Post() {}
@@ -67,14 +68,6 @@ public class Post {
         this.subtitle = subtitle;
     }
 
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
     public String getDate() {
         return date;
     }
@@ -83,11 +76,22 @@ public class Post {
         this.date = date;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getCover() {
+        return cover;
     }
 
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCover(String cover) { this.cover = cover; }
+
+    public boolean getDeleted() {
+        return this.deleted;
+    }
+
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
+
+    public long getLastUpdated() { return lastUpdated; }
+
+    public void setLastUpdated(long lastUpdated) { this.lastUpdated = lastUpdated; }
+
 }
 
 

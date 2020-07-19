@@ -10,4 +10,5 @@ public class CreatePostViewModel extends ViewModel {
     public void addPost(Post post) {
         PostRepository.getInstance().addPost(post);
     }
+
 }

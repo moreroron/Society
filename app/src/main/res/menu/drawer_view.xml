@@ -3,9 +3,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_menu_profile"
+            android:icon="@drawable/ic_baseline_account_box_24"
             android:title="Profile" />
         <item
             android:id="@+id/drawer_menu_signout"
+            android:icon="@drawable/ic_baseline_directions_run_24"
             android:title="Sign Out" />
     </group>
 </menu>

@@ -10,16 +10,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.society.adapters.PostAdapter;
 import com.example.society.models.Post;
+import com.example.society.repositories.PostRepository;
 import com.example.society.viewmodels.PostViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,8 +36,9 @@ public class PostsFragment extends Fragment {
     private boolean showSpinner;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter postAdapter;
+    private PostAdapter postAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefresh;
 
     public interface Delegate {
         void onAddPostClick();
@@ -71,21 +72,11 @@ public class PostsFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
 
         postsLiveData = viewModel.getAllPosts();
-//        showSpinnerLiveData = viewModel.showSpinner;
-//        showSpinnerLiveData.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean postsArrived) {
-//                    spinner.setVisibility(View.GONE);
-//            }
-//        });
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> postsData) {
-        // posts = postsData;
-        // postAdapter.notifyDataSetChanged();
-                postAdapter = new PostAdapter(postsData);
-                recyclerView.setAdapter(postAdapter);
-                spinner.setVisibility(View.GONE);
+             postAdapter.setPosts(postsData);
+             spinner.setVisibility(View.GONE);
             }
         });
 
@@ -93,6 +84,19 @@ public class PostsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 parent.onAddPostClick();
+            }
+        });
+
+        swipeRefresh = view.findViewById(R.id.fragment_posts_swipeRefresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                viewModel.refresh(new PostRepository.Listener() {
+                    @Override
+                    public void onComplete() {
+                        swipeRefresh.setRefreshing(false);
+                    }
+                });
             }
         });
 

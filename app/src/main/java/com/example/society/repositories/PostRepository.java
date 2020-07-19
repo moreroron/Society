@@ -1,10 +1,13 @@
 package com.example.society.repositories;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.society.SocietyApplication;
 import com.example.society.adapters.PostAdapter;
 import com.example.society.api.PostFirebase;
 import com.example.society.models.Post;
@@ -12,7 +15,13 @@ import com.example.society.models.PostDao;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class PostRepository {
+
+    public interface Listener {
+        void onComplete();
+    }
 
     private static PostRepository instance;
 
@@ -23,28 +32,74 @@ public class PostRepository {
         return instance;
     }
 
-
     public LiveData<List<Post>> getAllPosts() {
         LiveData<List<Post>> postsLiveData = AppDatabase.db.postDao().getAll();
+        refreshPostList(null);
+        return postsLiveData;
+    }
 
-        PostFirebase.getAllPosts(new Post.Listener<List<Post>>() {
+    public void refreshPostList(final Listener listener) {
+        final SharedPreferences postTimestamp = SocietyApplication.context.getSharedPreferences("lastUpdated", MODE_PRIVATE);
+        long lastUpdated = postTimestamp.getLong("PostsLastUpdateDate", 0);
+
+        PostFirebase.getAllPostsSince(lastUpdated, new Post.Listener<List<Post>>() {
             @SuppressLint("StaticFieldLeak")
             @Override
             public void onComplete(final List<Post> data) {
                 new AsyncTask<String, String, String>() {
                     @Override
                     protected String doInBackground(String... strings) {
+                        long lastUpdated = 0;
                         for(Post post : data) {
-                            AppDatabase.db.postDao().insertAll(post);
+                            if (post.getDeleted()) {
+                                AppDatabase.db.postDao().delete(post);
+                            } else {
+                                AppDatabase.db.postDao().insertAll(post);
+                            }
+                            if (post.getLastUpdated() > lastUpdated) {
+                                lastUpdated = post.getLastUpdated();
+                            }
                         }
+
+                        SharedPreferences.Editor edit = postTimestamp.edit();
+                        edit.putLong("PostsLastUpdateDate", lastUpdated);
+                        edit.apply();
                         return "";
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        super.onPostExecute(s);
+                        if (listener != null) listener.onComplete();
                     }
                 }.execute("");
             }
         });
-
-        return postsLiveData;
     }
+
+//    public void refreshPostList(final Listener listener) {
+//        PostFirebase.getAllPosts(new Post.Listener<List<Post>>() {
+//            @SuppressLint("StaticFieldLeak")
+//            @Override
+//            public void onComplete(final List<Post> data) {
+//                new AsyncTask<String, String, String>() {
+//                    @Override
+//                    protected String doInBackground(String... strings) {
+//                        for(Post post : data) {
+//                            AppDatabase.db.postDao().insertAll(post);
+//                        }
+//                        return "";
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(String s) {
+//                        super.onPostExecute(s);
+//                        if (listener != null) listener.onComplete();
+//                    }
+//                }.execute("");
+//            }
+//        });
+//    }
 
     public LiveData<Post> getPostByPostId(String postId) {
         return AppDatabase.db.postDao().getPostByPostId(postId);
@@ -76,7 +131,7 @@ public class PostRepository {
     }
 
     public void addPost(Post post) {
-        new InsertAsyncTask(AppDatabase.db.postDao()).execute(post);
+//        new InsertAsyncTask(AppDatabase.db.postDao()).execute(post);
 
         PostFirebase.addPost(post, new Post.Listener<Boolean>() {
             @Override
