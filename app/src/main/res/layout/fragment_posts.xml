@@ -7,6 +7,11 @@
     android:background="@color/mainBackground"
     tools:context=".PostsFragment">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_posts_swipeRefresh">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_posts_recyclerView"
         android:layout_width="0dp"
@@ -19,6 +24,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_posts_fab"
         android:layout_width="wrap_content"
@@ -26,7 +33,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
-        android:src="@drawable/fui_ic_github_white_24dp"
+        android:src="@drawable/ic_baseline_create_24"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -37,7 +44,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/fragment_posts_recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragment_posts_recyclerView" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

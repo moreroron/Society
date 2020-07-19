@@ -12,67 +12,83 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class PostFirebase {
 
     final static String POST_COLLECTION = "posts";
     public static final String TAG = MainActivity.class.getName();
 
-    public static void getAllPosts(final Post.Listener<List<Post>> listener) {
+    public static void getAllPostsSince(long timeSince, final Post.Listener<List<Post>> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Timestamp ts = new Timestamp(new Date(timeSince));
         db.collection(POST_COLLECTION)
+//                .whereEqualTo("deleted", false)
+                .whereGreaterThanOrEqualTo("lastUpdated", ts)
                 .get()
                 .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<Post> postsData = new LinkedList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Post post = document.toObject(Post.class);
-                        postsData.add(post);
-                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Post> postsData;
+                        if (task.isSuccessful()) {
+                            postsData = new LinkedList<>();
+                            for(QueryDocumentSnapshot doc : task.getResult()){
+                                Map<String,Object> json = doc.getData();
+                                Post post = postFromJson(json);
+                                postsData.add(post);
+                            }
+                            listener.onComplete(postsData);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
                     }
-                    listener.onComplete(postsData);
-                } else {
-                    Log.w(TAG, "Error getting documents.", task.getException());
-                }
-            }
-        }));
+                }));
     }
 
-//    public static void getPostsByUserId(String userId, final Post.Listener<List<Post>> listener) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(POST_COLLECTION).get().addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    List<Post> postsData = new LinkedList<>();
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Post post = document.toObject(Post.class);
-//                        postsData.add(post);
-//                        Log.d(TAG, document.getId() + " => " + document.getData());
-//                    }
-//                    listener.onComplete(postsData);
-//                } else {
-//                    Log.w(TAG, "Error getting documents.", task.getException());
-//                }
-//            }
-//        }));
-//    }
+    private static Post postFromJson(Map<String, Object> json){
+        Post post = new Post();
+        post.setPostId((String)json.get("postId"));
+        post.setUserId((String)json.get("userId"));
+        post.setAuthor((String)json.get("author"));
+        post.setTitle((String)json.get("title"));
+        post.setSubtitle((String)json.get("subtitle"));
+        post.setDate((String)json.get("date"));
+        post.setCover((String)json.get("cover"));
+        post.setDeleted((boolean)json.get("deleted"));
+        Timestamp ts = (Timestamp)json.get("lastUpdated");
+        if (ts != null) post.setLastUpdated(ts.toDate().getTime());
+        return post;
+    }
+
+    private static Map<String, Object> jsonFromPost(Post post) {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("postId", post.getPostId());
+        result.put("userId", post.getUserId());
+        result.put("author", post.getAuthor());
+        result.put("title", post.getTitle());
+        result.put("subtitle", post.getSubtitle());
+        result.put("date", post.getDate());
+        result.put("cover", post.getCover());
+        result.put("deleted", post.getDeleted());
+        result.put("lastUpdated", FieldValue.serverTimestamp());
+        return result;
+    }
 
     public static void addPost(Post post, final Post.Listener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(POST_COLLECTION)
                 .document(post.getPostId())
-                .set(post)
+                .set(jsonFromPost(post))
                 .addOnCompleteListener((new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -82,6 +98,33 @@ public class PostFirebase {
             }
         }));
     }
+
+
+
+
+//    static void addReport(final Report report, final ReportModel.Listener<Report> listener) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection(REPORT_COLLECTION).add(jsonFromReport(report)).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentReference> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentReference result = task.getResult();
+//                    if (result != null)
+//                        report.setId(result.getId());
+//                    report.setReporterId(UserModel.instance.getCurrentUserId());
+//                    if (listener != null) {
+//                        listener.onComplete(report);
+//                    }
+//                } else {
+//                    listener.onComplete(null);
+//                }
+//
+//            }
+//        });
+//    }
+
+
+
 
     public static void updatePost(Post post, final PostAdapter.Listener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -102,7 +145,7 @@ public class PostFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(POST_COLLECTION)
                 .document(post.getPostId())
-                .delete()
+                .update("deleted", true)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -116,6 +159,29 @@ public class PostFirebase {
                     }
                 });
     }
+
+    //    public static void getAllPosts(final Post.Listener<List<Post>> listener) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection(POST_COLLECTION)
+////                .whereEqualTo("deleted", false)
+//                .get()
+//                .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    List<Post> postsData = new LinkedList<>();
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Post post = document.toObject(Post.class);
+//                        postsData.add(post);
+//                        Log.d(TAG, document.getId() + " => " + document.getData());
+//                    }
+//                    listener.onComplete(postsData);
+//                } else {
+//                    Log.w(TAG, "Error getting documents.", task.getException());
+//                }
+//            }
+//        }));
+//    }
 
 }
 

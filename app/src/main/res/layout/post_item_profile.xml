@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/post_item_cover_imageView"
+            android:id="@+id/post_item_profile_cover_imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
@@ -29,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/thelastofusparttwo" />
+             />
 
         <ImageView
             android:layout_width="0dp"
@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/post_item_cover_imageView"
+            app:layout_constraintTop_toTopOf="@+id/post_item_profile_cover_imageView"
             app:srcCompat="@drawable/bottomshadow" />
 
         <TextView
@@ -54,15 +54,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/post_item_profile_avatar_imageView" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/post_item_profile_avatar_imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="24dp"
             android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FFFFFF"
+            android:src="@mipmap/ic_launcher" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"

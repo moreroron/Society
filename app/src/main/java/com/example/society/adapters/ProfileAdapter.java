@@ -13,10 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.society.R;
 import com.example.society.models.Post;
+import com.example.society.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHolder>  {
+
+    private User currentUser;
+    private FirebaseUser user;
+    private List<Post> posts;
 
     private AdapterCallback callback;
 
@@ -25,9 +33,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHold
         void onDeleteClick(Post post);
     }
 
-    private List<Post> posts;
-
-    public ProfileAdapter(List<Post> posts, Context context, AdapterCallback callback) {
+    public ProfileAdapter(List<Post> posts, AdapterCallback callback) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
         this.posts = posts;
 
         try {
@@ -59,8 +66,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHold
         private TextView date;
         private TextView subtitle;
         private TextView title;
+        private ImageView avatar;
         private ImageView editBtn;
         private ImageView deleteBtn;
+        private ImageView cover;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +77,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHold
             date = itemView.findViewById(R.id.post_item_profile_date_textView);
             subtitle = itemView.findViewById(R.id.post_item_profile_subtitle_textView);
             title = itemView.findViewById(R.id.post_item_profile_title_textView);
+            avatar = itemView.findViewById(R.id.post_item_profile_avatar_imageView);
+            cover = itemView.findViewById(R.id.post_item_profile_cover_imageView);
             editBtn = itemView.findViewById(R.id.post_item_profile_editBtn_Btn);
             deleteBtn = itemView.findViewById(R.id.post_item_profile_deleteBtn_Btn);
         }
@@ -78,6 +89,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHold
             date.setText(currentPost.getDate());
             subtitle.setText(currentPost.getSubtitle());
             title.setText(currentPost.getTitle());
+            Picasso.get().load(currentPost.getCover()).placeholder(R.mipmap.ic_launcher).into(cover);
+
+            if (user != null) {
+                Picasso.get().load(user.getPhotoUrl()).placeholder(R.mipmap.ic_launcher).into(avatar);
+            }
+
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
