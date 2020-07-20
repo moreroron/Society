@@ -7,9 +7,9 @@ import androidx.room.RoomDatabase;
 import com.example.society.SocietyApplication;
 import com.example.society.models.Post;
 import com.example.society.models.PostDao;
-import com.example.society.models.User;
+//import com.example.society.models.User;
 
-@Database(entities = {User.class, Post.class}, version = 15)
+@Database(entities = {Post.class}, version = 17)
 abstract class AppDatabaseRepository extends RoomDatabase {
     public abstract PostDao postDao();
 }

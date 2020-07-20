@@ -33,7 +33,6 @@ public class PostFirebase {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp ts = new Timestamp(new Date(timeSince));
         db.collection(POST_COLLECTION)
-//                .whereEqualTo("deleted", false)
                 .whereGreaterThanOrEqualTo("lastUpdated", ts)
                 .get()
                 .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
@@ -99,33 +98,6 @@ public class PostFirebase {
         }));
     }
 
-
-
-
-//    static void addReport(final Report report, final ReportModel.Listener<Report> listener) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(REPORT_COLLECTION).add(jsonFromReport(report)).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentReference> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentReference result = task.getResult();
-//                    if (result != null)
-//                        report.setId(result.getId());
-//                    report.setReporterId(UserModel.instance.getCurrentUserId());
-//                    if (listener != null) {
-//                        listener.onComplete(report);
-//                    }
-//                } else {
-//                    listener.onComplete(null);
-//                }
-//
-//            }
-//        });
-//    }
-
-
-
-
     public static void updatePost(Post post, final PostAdapter.Listener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(POST_COLLECTION)
@@ -160,30 +132,11 @@ public class PostFirebase {
                 });
     }
 
-    //    public static void getAllPosts(final Post.Listener<List<Post>> listener) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(POST_COLLECTION)
-////                .whereEqualTo("deleted", false)
-//                .get()
-//                .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    List<Post> postsData = new LinkedList<>();
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Post post = document.toObject(Post.class);
-//                        postsData.add(post);
-//                        Log.d(TAG, document.getId() + " => " + document.getData());
-//                    }
-//                    listener.onComplete(postsData);
-//                } else {
-//                    Log.w(TAG, "Error getting documents.", task.getException());
-//                }
-//            }
-//        }));
-//    }
-
 }
+
+//                .whereEqualTo("deleted", false)
+//                not working - retrieving only 'deleted = false' docs means the device which didn't upload the post
+//                but has it in cache won't override its previews 'deleted = false', so it won't delete it.
 
 
 

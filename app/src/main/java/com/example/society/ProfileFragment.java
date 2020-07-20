@@ -68,8 +68,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
     private Bitmap avatarBitmap;
 
     private FirebaseUser user;
-    private LiveData<User> userLiveData;
-    private User currentUser;
     private ProgressBar spinner;
     private View whitescreen;
 
@@ -189,7 +187,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
             @Override
             public void onFail() {
                 spinner.setVisibility(View.GONE);
-                Log.d(TAG, "Fail to save avatar to FB local storage");
+                Toast.makeText(getContext(), "Failed to Update Avatar", Toast.LENGTH_SHORT).show();
             }
         });
     }

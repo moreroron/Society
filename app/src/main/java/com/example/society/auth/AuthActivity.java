@@ -120,21 +120,18 @@ public class AuthActivity extends AppCompatActivity implements
                 });
     }
 
-    // adds additional information for registered user (username + avatar) AND redirect forward
+    // adds additional information for registered user (USERNAME) + redirect forward
     private void addAdditionalInformation(String username, final Listener listener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(username)
-                // TODO: set user avatar
-                // .setPhotoUri(Uri.parse(avatar))
                 .build();
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
                         if (task.isSuccessful()) {
                             listener.onComplete();
                             ActivityNavigator activityNavigator = new ActivityNavigator(getApplicationContext());
