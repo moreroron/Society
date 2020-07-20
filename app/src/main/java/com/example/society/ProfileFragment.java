@@ -141,12 +141,16 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
     public void onDeleteClick(final Post post) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setTitle("Delete Post");
-        alertDialogBuilder.setMessage("Are you sure you want do delete " + post.getTitle() + "?\nThere is no turning back.");
-        alertDialogBuilder.setPositiveButton("CONFIRM DELETE", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setMessage("Are you sure you want do delete " + "\"" + post.getTitle() + "\"" + "?\nThere is no turning back.");
+        alertDialogBuilder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 viewModel.deletePost(post);
             }
+        });
+        alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
         });
         alertDialogBuilder.create();
         alertDialogBuilder.show();

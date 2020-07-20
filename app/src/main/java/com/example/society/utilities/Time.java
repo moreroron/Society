@@ -5,7 +5,6 @@ public class Time {
     {
         long difference=0;
         Long mDate = java.lang.System.currentTimeMillis();
-
         if(mDate > delta)
         {
             difference= mDate - delta;
