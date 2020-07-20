@@ -1,21 +1,18 @@
 package com.example.society.adapters;
 
 import android.net.Uri;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.society.R;
 import com.example.society.models.Post;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +20,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import static android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE;
+import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
@@ -85,7 +88,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         public void onBind(int position) {
             Post currentPost = posts.get(position);
             username.setText(currentPost.getAuthor());
-            date.setText(currentPost.getDate());
+            CharSequence convertedTime = convertTimeTemplate(currentPost);
+            date.setText(convertedTime);
             subtitle.setText(currentPost.getSubtitle());
             title.setText(currentPost.getTitle());
 
@@ -103,6 +107,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                 }
             });
 
+        }
+
+        // from date to "x time ago template"
+        public CharSequence convertTimeTemplate(Post post) {
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+            Date date = null;
+            try { date = sdf.parse(post.getDate()); }
+            catch (Exception e){ e.printStackTrace(); }
+            long postDate = date.getTime();
+            CharSequence actualTime = DateUtils.getRelativeTimeSpanString(postDate, new Date().getTime(), MINUTE_IN_MILLIS);
+            return actualTime;
         }
     }
 

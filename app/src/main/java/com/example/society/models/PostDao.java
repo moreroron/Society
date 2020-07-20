@@ -15,9 +15,6 @@ public interface PostDao {
     @Query("select * from Post")
     LiveData<List<Post>> getAll();
 
-//    @Query("select * from Post WHERE deleted = 1")
-//    LiveData<List<Post>> getAllUndeletedPosts();
-
     @Query("SELECT * FROM Post WHERE userId=:userId ")
     LiveData<List<Post>> getPostsByUserId(String userId);
 

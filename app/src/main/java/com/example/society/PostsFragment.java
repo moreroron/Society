@@ -32,8 +32,6 @@ public class PostsFragment extends Fragment {
     private Delegate parent;
     private PostViewModel viewModel;
     LiveData<List<Post>> postsLiveData;
-    LiveData<Boolean> showSpinnerLiveData;
-    private boolean showSpinner;
 
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
