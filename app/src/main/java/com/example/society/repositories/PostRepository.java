@@ -3,9 +3,11 @@ package com.example.society.repositories;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.society.MainActivity;
 import com.example.society.SocietyApplication;
 import com.example.society.adapters.PostAdapter;
 import com.example.society.api.PostFirebase;

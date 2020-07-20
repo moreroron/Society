@@ -1,10 +1,13 @@
 package com.example.society.api;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.society.MainActivity;
+import com.example.society.PostsFragment;
 import com.example.society.adapters.PostAdapter;
 import com.example.society.models.Post;
 
@@ -114,10 +117,14 @@ public class PostFirebase {
     }
 
     public static void deletePost(Post post) {
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("lastUpdated", FieldValue.serverTimestamp());
+        updates.put("deleted", true);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(POST_COLLECTION)
                 .document(post.getPostId())
-                .update("deleted", true)
+                .update(updates)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

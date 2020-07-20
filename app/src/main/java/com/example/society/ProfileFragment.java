@@ -1,6 +1,7 @@
 package com.example.society;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -136,8 +138,18 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
     }
 
     @Override
-    public void onDeleteClick(Post post) {
-        viewModel.deletePost(post);
+    public void onDeleteClick(final Post post) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle("Delete Post");
+        alertDialogBuilder.setMessage("Are you sure you want do delete " + post.getTitle() + "?\nThere is no turning back.");
+        alertDialogBuilder.setPositiveButton("CONFIRM DELETE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                viewModel.deletePost(post);
+            }
+        });
+        alertDialogBuilder.create();
+        alertDialogBuilder.show();
     }
 
     private void takePhoto() {
