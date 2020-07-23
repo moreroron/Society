@@ -102,10 +102,20 @@ public class PostFirebase {
     }
 
     public static void updatePost(Post post, final PostAdapter.Listener<Boolean> listener) {
+        Map<String,Object> updates = new HashMap<>();
+        updates.put("author", post.getAuthor());
+        updates.put("cover", post.getCover());
+        updates.put("deleted", post.getDeleted());
+        updates.put("date", post.getDate());
+        updates.put("subtitle", post.getSubtitle());
+        updates.put("postId", post.getPostId());
+        updates.put("userId", post.getUserId());
+        updates.put("title", post.getTitle());
+        updates.put("lastUpdated", FieldValue.serverTimestamp());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(POST_COLLECTION)
                 .document(post.getPostId())
-                .set(post)
+                .set(updates)
                 .addOnCompleteListener((new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
