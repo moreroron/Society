@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -34,6 +36,7 @@ import com.example.society.api.UserFirebase;
 import com.example.society.models.Post;
 import com.example.society.models.StoreModel;
 import com.example.society.models.User;
+import com.example.society.utilities.Dates;
 import com.example.society.viewmodels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -96,9 +99,11 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
 
         postsLiveData = viewModel.getPosts();
         postsLiveData.observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChanged(List<Post> postsData) {
-                profileAdapter = new ProfileAdapter(postsData ,ProfileFragment.this);
+                List<Post> sortedPosts = Dates.sortPosts(postsData);
+                profileAdapter = new ProfileAdapter(sortedPosts ,ProfileFragment.this);
                 recyclerView.setAdapter(profileAdapter);
             }
         });
@@ -127,7 +132,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.AdapterC
 
         profileAdapter = new ProfileAdapter(posts, ProfileFragment.this);
         recyclerView.setAdapter(profileAdapter);
-        
     }
 
     @Override

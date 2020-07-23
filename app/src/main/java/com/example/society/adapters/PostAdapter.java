@@ -2,17 +2,28 @@ package com.example.society.adapters;
 
 import android.net.Uri;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.society.PostsFragment;
+import com.example.society.PostsFragmentDirections;
 import com.example.society.R;
+import com.example.society.UserDetailsFragmentArgs;
+import com.example.society.UserDetailsFragmentDirections;
+import com.example.society.api.PostFirebase;
 import com.example.society.models.Post;
+import com.example.society.utilities.Dates;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,19 +41,23 @@ import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
-    private FirebaseUser user;
+    private List<Post> posts;
+    private AvatarClick callback;
 
     public interface Listener<T> {
         void onComplete(T data);
     }
 
-    private List<Post> posts;
-
-
+    public interface AvatarClick {
+        void avatarOnClick(Post post, View view);
+    }
 
     public PostAdapter(List<Post> posts) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
         this.posts = posts;
+    }
+
+    public void setAvatarClickListener(AvatarClick listener) {
+        this.callback = listener;
     }
 
     public void setPosts(List<Post> posts) {
@@ -86,9 +101,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         }
 
         public void onBind(int position) {
-            Post currentPost = posts.get(position);
+            final Post currentPost = posts.get(position);
             username.setText(currentPost.getAuthor());
-            CharSequence convertedTime = convertTimeTemplate(currentPost);
+            CharSequence convertedTime = Dates.convertTimeTemplate(currentPost);
             date.setText(convertedTime);
             subtitle.setText(currentPost.getSubtitle());
             title.setText(currentPost.getTitle());
@@ -107,17 +122,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                 }
             });
 
-        }
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // check if we are in PostFragment - if so, avatar is clickable and directs to user's details
+                    if (callback instanceof PostsFragment)
+                    callback.avatarOnClick(currentPost, v);
+                }
+            });
 
-        // from date to "x time ago template"
-        public CharSequence convertTimeTemplate(Post post) {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-            Date date = null;
-            try { date = sdf.parse(post.getDate()); }
-            catch (Exception e){ e.printStackTrace(); }
-            long postDate = date.getTime();
-            CharSequence actualTime = DateUtils.getRelativeTimeSpanString(postDate, new Date().getTime(), MINUTE_IN_MILLIS);
-            return actualTime;
         }
     }
 

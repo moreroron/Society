@@ -1,6 +1,5 @@
 package com.example.society.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.society.R;
 import com.example.society.models.Post;
-import com.example.society.models.User;
+import com.example.society.utilities.Dates;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -22,7 +20,6 @@ import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHolder>  {
 
-    private User currentUser;
     private FirebaseUser user;
     private List<Post> posts;
 
@@ -86,7 +83,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.PostHold
         public void onBind(int position) {
             final Post currentPost = posts.get(position);
             username.setText(currentPost.getAuthor());
-            date.setText(currentPost.getDate());
+            CharSequence convertedTime = Dates.convertTimeTemplate(currentPost);
+            date.setText(convertedTime);
             subtitle.setText(currentPost.getSubtitle());
             title.setText(currentPost.getTitle());
             Picasso.get().load(currentPost.getCover()).placeholder(R.mipmap.ic_launcher).into(cover);
